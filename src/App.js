@@ -6,19 +6,20 @@ import Home from './components/Home/Home';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import Exercise from './components/Exercise/Exercise';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 function App() {
   const [userPresent, setUserPresent] = useState(false);
+  const myContext = useContext('');
+  
 
 
-  const registerUserHandler = () => {
-
-  }
+  
 
   return (
     <div>
-      <Header registerUserHandler={registerUserHandler} userPresent={userPresent}></Header>
+      
+      <Header userPresent={userPresent}></Header>
       <Routes>
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/about' element={<About></About>}></Route>

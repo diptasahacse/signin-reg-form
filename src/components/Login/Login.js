@@ -1,11 +1,61 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 import './Login.css'
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import auth from '../../firebase.init';
 const Login = () => {
+    const [userEmail, setuserEmail] = useState('');
+    const [userPassword, setuserPassword] = useState('');
+    const [ErrorMessage, setErrorMessage] = useState('');
+    const [SuccessMessage, setSuccessMessage] = useState('');
+
+    const userLoginHandler = (event) => {
+        event.preventDefault();
+
+        signInWithEmailAndPassword(auth, userEmail, userPassword)
+            .then((result) => {
+                if (!result.user.emailVerified) {
+                    setErrorMessage("Your account is not verified. please verified")
+                }
+                else {
+                    setSuccessMessage("you are successfully logged in")
+
+                }
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
+
+
+    }
+    const forgetPassHandler = () => {
+        sendPasswordResetEmail(auth,userEmail)
+        .then(()=>{
+            setSuccessMessage("Password reset email sent!")
+
+        })
+        .catch(error =>{
+            setErrorMessage('Something went wrong')
+
+        })
+        
+
+
+    }
+    const userEmailHandler = (event) => {
+        setuserEmail(event.target.value)
+
+
+    }
+    const userPasswordHandler = (event) => {
+        setuserPassword(event.target.value)
+
+
+    }
     return (
         <div className='login-form vh-100'>
             <div className="container">
@@ -46,14 +96,14 @@ const Login = () => {
                                         <small >Or Login with email</small>
                                     </p>
                                     <div>
-                                        <Form>
+                                        <Form onSubmit={userLoginHandler}>
                                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                                 <FloatingLabel
                                                     controlId="floatingInput"
                                                     label="Email address"
-                                                    
+
                                                 >
-                                                    <Form.Control type="email" placeholder="name@example.com" />
+                                                    <Form.Control onBlur={userEmailHandler} type="email" placeholder="name@example.com" />
                                                 </FloatingLabel>
                                                 <Form.Text className="text-muted">
                                                     We'll never share your email with anyone else.
@@ -64,15 +114,20 @@ const Login = () => {
                                                 <FloatingLabel
                                                     controlId="floatingInput"
                                                     label="Password"
-                                                    
+
                                                 >
-                                                    <Form.Control type="password" placeholder="Password" />
+                                                    <Form.Control onBlur={userPasswordHandler} type="password" placeholder="Password" />
                                                 </FloatingLabel>
                                             </Form.Group>
-                                            
-                                            <Button size='sm' variant="primary" type="submit">
-                                                Sign In
-                                            </Button>
+                                            {
+                                                ErrorMessage ? <p className='text-danger'>{ErrorMessage}</p> : <p className='text-primary'>{SuccessMessage}</p>
+                                            }
+                                            <div className='d-flex justify-content-between'>
+                                                <Button size='sm' variant="primary" type="submit">
+                                                    Sign In
+                                                </Button>
+                                                <button onClick={forgetPassHandler} className='btn btn-link text-decoration-none'><small>Forgot Password..?</small></button>
+                                            </div>
                                         </Form>
                                     </div>
 

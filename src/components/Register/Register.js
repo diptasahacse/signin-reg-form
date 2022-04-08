@@ -1,11 +1,45 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Register.css'
+import auth from '../../firebase.init'
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const Register = () => {
+    const [name, setName] = useState('');
+    const [userEmail, setuserEmail] = useState('');
+    const [userPassword, setuserPassword] = useState('');
+    const [successMessage, setsuccessMessage] = useState('');
+    
+    const navigate = useNavigate()
+    const userRegisterHandler = (event) => {
+        event.preventDefault();
+
+        createUserWithEmailAndPassword(auth, userEmail, userPassword)
+            .then((result) => {
+                sendEmailVerification(auth.currentUser)
+                .then(()=>{
+                    setsuccessMessage('Verification email sent to your  email. please verify It.')
+                });
+            })
+            .catch(error => {
+                console.log("Something went wrong")
+            })
+
+
+    }
+    const userEmailHandler = (event) => {
+        setuserEmail(event.target.value)
+
+
+    }
+    const userPasswordHandler = (event) => {
+        setuserPassword(event.target.value)
+
+
+    }
     return (
         <div className='login-form vh-100'>
             <div className="container">
@@ -46,7 +80,7 @@ const Register = () => {
                                         <small >Or Register with email</small>
                                     </p>
                                     <div>
-                                        <Form>
+                                        <Form onSubmit={userRegisterHandler}>
                                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                                 <FloatingLabel
                                                     controlId="floatingInput"
@@ -62,7 +96,7 @@ const Register = () => {
                                                     label="Email address"
 
                                                 >
-                                                    <Form.Control type="email" placeholder="name@example.com" />
+                                                    <Form.Control onBlur={userEmailHandler} type="email" placeholder="name@example.com" />
                                                 </FloatingLabel>
                                                 <Form.Text className="text-muted">
                                                     We'll never share your email with anyone else.
@@ -75,10 +109,12 @@ const Register = () => {
                                                     label="Password"
 
                                                 >
-                                                    <Form.Control type="password" placeholder="Password" />
+                                                    <Form.Control onBlur={userPasswordHandler} type="password" placeholder="Password" />
                                                 </FloatingLabel>
                                             </Form.Group>
-
+                                            {
+                                                successMessage ? <p className='text-success'>{successMessage}</p> : ""
+                                            }
                                             <Button size='sm' variant="primary" type="submit">
                                                 Register
                                             </Button>
