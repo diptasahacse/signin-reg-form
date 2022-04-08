@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -7,11 +7,13 @@ import './Login.css'
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../firebase.init';
+import { myContext } from '../../App';
 const Login = () => {
     const [userEmail, setuserEmail] = useState('');
     const [userPassword, setuserPassword] = useState('');
     const [ErrorMessage, setErrorMessage] = useState('');
     const [SuccessMessage, setSuccessMessage] = useState('');
+    const setUserPresent = useContext(myContext)
 
     const userLoginHandler = (event) => {
         event.preventDefault();
@@ -23,6 +25,7 @@ const Login = () => {
                 }
                 else {
                     setSuccessMessage("you are successfully logged in")
+                    setUserPresent(true)
 
                 }
             })
