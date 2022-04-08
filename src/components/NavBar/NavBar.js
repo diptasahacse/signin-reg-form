@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import NormalNavLink from '../NormalNavLink/NormalNavLink';
 import UserNavLink from '../UserNavLink/UserNavLink';
 
-const NavBar = ({userPresent}) => {
+const NavBar = ({userPresent,registerUserHandler}) => {
     return (
         <Navbar bg="light" expand="lg">
             <Container>
@@ -15,7 +15,7 @@ const NavBar = ({userPresent}) => {
                         <Link className='nav-link' to='/'>Home</Link>
                         <Link className='nav-link' to='/exercise'>MCQ Exercise</Link>
                         {
-                            userPresent ? <UserNavLink></UserNavLink> : <NormalNavLink></NormalNavLink>
+                            userPresent ? <UserNavLink ></UserNavLink> : <NormalNavLink registerUserHandler={registerUserHandler}></NormalNavLink>
                         }
                     </Nav>
                 </Navbar.Collapse>

@@ -1,10 +1,10 @@
 import React from 'react';
 import NavBar from '../NavBar/NavBar';
 
-const Header = ({userPresent}) => {
+const Header = ({userPresent,registerUserHandler}) => {
     return (
         <div>
-            <NavBar userPresent={userPresent}></NavBar>
+            <NavBar registerUserHandler={registerUserHandler} userPresent={userPresent}></NavBar>
             
         </div>
     );

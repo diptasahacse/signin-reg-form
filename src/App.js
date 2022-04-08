@@ -9,11 +9,16 @@ import Exercise from './components/Exercise/Exercise';
 import { useState } from 'react';
 
 function App() {
-  const [userPresent, setUserPresent] = useState(false)
+  const [userPresent, setUserPresent] = useState(false);
+
+
+  const registerUserHandler = () => {
+
+  }
 
   return (
     <div>
-      <Header userPresent={userPresent}></Header>
+      <Header registerUserHandler={registerUserHandler} userPresent={userPresent}></Header>
       <Routes>
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/about' element={<About></About>}></Route>
