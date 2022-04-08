@@ -9,7 +9,7 @@ import Exercise from './components/Exercise/Exercise';
 import { useState } from 'react';
 
 function App() {
-  const [userPresent, setUserPresent] = useState(true)
+  const [userPresent, setUserPresent] = useState(false)
 
   return (
     <div>
